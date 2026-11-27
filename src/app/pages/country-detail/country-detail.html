@@ -1,0 +1,56 @@
+<main class="max-w-5xl mx-auto p-8">
+  <a routerLink="/" class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-purple-500 text-sm font-medium transition cursor-pointer shadow-sm">
+    ← Voltar para a lista
+  </a>
+
+  @if (loading()) {
+  <p class="text-slate-500 dark:text-slate-400">Carregando detalhes...</p>
+  } @else if (error() || !country()) {
+  <p class="text-red-600 dark:text-red-400">Não foi possível carregar os dados deste país.</p>
+  } @else {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white dark:bg-slate-800/50 p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+    <img [src]="country()!.flags.svg" [alt]="country()!.flags.alt || country()!.name.common" class="w-full rounded-lg shadow-md border border-slate-200 dark:border-slate-700" />
+
+    <div>
+      <div class="flex items-center justify-between gap-4 mb-2">
+        <h1 class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+          {{ country()!.name.common }}
+        </h1>
+
+        <button type="button" (click)="favoritesService.toggleFavorite(country()!.cca3)" class="px-3.5 py-1.5 rounded-lg text-sm font-medium border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 hover:border-amber-500 transition cursor-pointer shrink-0">
+          @if (favoritesService.isFavorite(country()!.cca3)) {
+          <span class="text-amber-500">★ Favoritado</span>
+          } @else {
+          <span class="text-slate-600 dark:text-slate-300">☆ Favoritar</span>
+          }
+        </button>
+      </div>
+
+      <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">
+        Nome oficial: {{ country()!.name.official }}
+      </p>
+
+      <div class="space-y-2.5 text-sm text-slate-700 dark:text-slate-200">
+        <p><strong>Capital:</strong> {{ country()!.capital?.[0] || 'Não possui' }}</p>
+        <p><strong>Região:</strong> {{ country()!.region }} ({{ country()!.subregion || 'N/A' }})</p>
+        <p><strong>População:</strong> {{ country()!.population | number }}</p>
+        <p><strong>Idiomas:</strong> {{ languagesList() }}</p>
+        <p><strong>Moedas:</strong> {{ currenciesList() }}</p>
+      </div>
+
+      @if (borderCountries().length) {
+      <div class="mt-6">
+        <p class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Países vizinhos:</p>
+        <div class="flex flex-wrap gap-2">
+          @for (neighbor of borderCountries(); track neighbor.cca3) {
+          <a [routerLink]="['/pais', neighbor.name.common]" class="px-3 py-1.5 text-xs font-medium rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:border-purple-500 hover:text-purple-600 dark:hover:text-purple-400 transition cursor-pointer">
+            {{ neighbor.name.common }}
+          </a>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+</main>
