@@ -1,0 +1,50 @@
+<main class="max-w-6xl mx-auto p-8">
+  <!-- Barra de Filtros e Ordenação -->
+  <div class="flex flex-col lg:flex-row gap-4 mb-8 justify-between">
+    <input type="text" placeholder="Buscar país pelo nome..." [value]="searchTerm()" (input)="onSearch($event)" class="w-full lg:w-80 px-4 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition shadow-sm" />
+
+    <div class="flex flex-wrap sm:flex-nowrap gap-3">
+      <button type="button" (click)="toggleOnlyFavorites()" [class]="onlyFavorites()
+          ? 'px-4 py-2.5 rounded-lg border border-amber-500 bg-amber-500/15 text-amber-600 dark:text-amber-400 font-medium text-sm transition cursor-pointer shadow-sm shrink-0'
+          : 'px-4 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:border-purple-500 text-sm font-medium transition cursor-pointer shadow-sm shrink-0'">
+        ★ Favoritos ({{ favoritesService.favorites().length }})
+      </button>
+
+      <select [value]="sortBy()" (change)="onSortChange($event)" class="w-full sm:w-48 px-4 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-purple-500 transition cursor-pointer shadow-sm">
+        <option value="name-asc">Nome (A–Z)</option>
+        <option value="name-desc">Nome (Z–A)</option>
+        <option value="pop-desc">Maior População</option>
+      </select>
+
+      <select [value]="selectedRegion()" (change)="onRegionChange($event)" class="w-full sm:w-48 px-4 py-2.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-purple-500 transition cursor-pointer shadow-sm">
+        <option value="">Todas as regiões</option>
+        @for (region of regions; track region) {
+        <option [value]="region">{{ region }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Listagem -->
+  @if (loading()) {
+  <p class="text-slate-500 dark:text-slate-400">Carregando países...</p>
+  } @else {
+  <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">
+    Mostrando {{ filteredCountries().length }} de {{ countries().length }} países
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    @for (country of filteredCountries(); track country.cca3) {
+    <app-country-card [country]="country" />
+    } @empty {
+    <p class="col-span-full text-center text-slate-500 dark:text-slate-400 py-12">
+      @if (onlyFavorites() && favoritesService.favorites().length === 0) {
+      Você ainda não adicionou nenhum país aos favoritos.
+      } @else {
+      Nenhum país encontrado para os filtros selecionados.
+      }
+    </p>
+    }
+  </div>
+  }
+</main>
