@@ -1,0 +1,23 @@
+<article class="bg-slate-800 rounded-lg overflow-hidden shadow-lg border border-slate-700 hover:border-purple-500 transition h-full flex flex-col">
+  <a [routerLink]="['/pais', country().name.common]" class="relative bg-white dark:bg-slate-800 rounded-lg overflow-hidden shadow-md dark:shadow-lg border border-slate-200 dark:border-slate-700 hover:border-purple-500 transition h-full flex flex-col cursor-pointer">
+    <button type="button" (click)="onToggleFavorite($event)" [title]="favoritesService.isFavorite(country().cca3) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'" class="absolute top-2.5 right-2.5 z-10 w-9 h-9 rounded-full bg-slate-900/70 hover:bg-slate-900 text-lg flex items-center justify-center backdrop-blur-xs transition cursor-pointer">
+      @if (favoritesService.isFavorite(country().cca3)) {
+      <span class="text-amber-400">★</span>
+      } @else {
+      <span class="text-white/80 hover:text-white">☆</span>
+      }
+    </button>
+
+    <img [src]="country().flags.svg" [alt]="country().flags.alt || country().name.common" class="w-full h-40 object-cover border-b border-slate-100 dark:border-slate-700" />
+    <div class="p-4 flex-1 flex flex-col justify-between">
+      <div>
+        <h2 class="text-lg font-semibold mb-2 text-slate-900 dark:text-white">{{ country().name.common }}</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300"><strong>Região:</strong> {{ country().region }}</p>
+        <p class="text-sm text-slate-600 dark:text-slate-300"><strong>População:</strong> {{ country().population | number }}</p>
+        @if (country().capital?.length) {
+        <p class="text-sm text-slate-600 dark:text-slate-300"><strong>Capital:</strong> {{ country().capital?.[0] }}</p>
+        }
+      </div>
+    </div>
+  </a>
+</article>
