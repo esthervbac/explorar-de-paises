@@ -1,59 +1,84 @@
-# ExploradorPaises
+# 🌍 Explorador de Países
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.3.0.
+Aplicação web moderna construída com **Angular**, **TypeScript** e **Tailwind CSS** para explorar informações detalhadas de mais de 250 países e territórios ao redor do mundo, com busca em tempo real, filtros combinados, sistema de favoritos e alternância de tema claro/escuro.
 
-## Development server
+---
 
-To start a local development server, run:
+## Acessar o site
 
-```bash
+Link: [https://explorar-de-paises.vercel.app/](https://explorar-de-paises.vercel.app/)
+
+---
+
+## ✨ Funcionalidades
+
+- **Listagem e Busca Reativa:** Pesquisa instantânea por nome do país com atualização em tempo real via Angular Signals.
+- **Filtros e Ordenação Combinados:**
+  - Filtro por continente/região (`Africa`, `Americas`, `Asia`, `Europe`, `Oceania`).
+  - Filtro exclusivo para países favoritados.
+  - Ordenação dinâmica por nome (`A–Z`, `Z–A`) e por maior população (`localeCompare` em `pt-BR`).
+- **Página de Detalhes (`/pais/:name`):** Exibe bandeira em alta resolução (SVG), nome oficial, capital, região/sub-região, população formatada, idiomas falados, moedas e países vizinhos clicáveis.
+- **Sistema de Favoritos Persistente:** Permite favoritar/desfavoritar países tanto na grade principal quanto na tela de detalhes, salvando automaticamente no `localStorage`.
+- **Tema Light / Dark Mode:** Alternância fluida entre modo claro e escuro com persistência no `localStorage`.
+- **Cache de Requisições HTTP:** Uso de RxJS `shareReplay(1)` no `CountryService` para evitar chamadas redundantes à API durante a navegação.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **[Angular](https://angular.dev/)** (Standalone Components, Signals, `computed()`, `effect()`, `inject()`, Novo Control Flow `@if` / `@for`)
+- **[TypeScript](https://www.typescriptlang.org/)**
+- **[Tailwind CSS v4](https://tailwindcss.com/)**
+- **[RxJS](https://rxjs.dev/)** (`map`, `switchMap`, `shareReplay`)
+- **Dados e Bandeiras:** Dataset `mledoze/countries` integrado com bandeiras vetoriais via **FlagCDN**.
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+src/
+├── app/
+│   ├── components/
+│   │   ├── country-card/     # Card reutilizável com bandeira, resumo e botão de favorito
+│   │   └── navbar/           # Cabeçalho global com navegação e alternador de tema
+│   ├── models/
+│   │   └── country.model.ts  # Tipagem estrita da entidade Country
+│   ├── pages/
+│   │   ├── country-detail/   # Rota dinâmica (/pais/:name) com detalhes e fronteiras
+│   │   └── home/             # Página inicial com filtros, ordenação e grade responsiva
+│   ├── services/
+│   │   ├── country.ts        # Consumo de dados, normalização e cache em memória
+│   │   ├── favorites.ts      # Estado reativo e persistência dos favoritos
+│   │   └── theme.ts          # Gerenciamento do tema Light/Dark
+│   ├── app.config.ts         # Configuração do Router e HttpClient (withFetch)
+│   ├── app.routes.ts         # Definição das rotas da aplicação
+│   └── app.routes.server.ts  # Configuração de renderização (Client/Prerender)
+└── public/
+    └── favicon.svg           # Ícone vetorial personalizado da aplicação
+```
+
+---
+
+## 🚀 Como Executar Localmente
+
+1. Clone o repositório:
+
+```
+git clone [https://github.com/esthervbac/explorar-de-paises.git](https://github.com/esthervbac/explorar-de-paises.git)
+cd seu-repositorio
+```
+
+2. Instale as dependências:
+
+```
+npm install
+```
+
+3. Inicie o servidor de desenvolvimento:
+
+```
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+4. Acesse `http://localhost:4200/` no navegador.
